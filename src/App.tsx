@@ -153,14 +153,9 @@ const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
   console.log(`${target.id} cancel button form clicked`)
 }
 
-const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
   const target = e.target as HTMLElement
-  console.log(`${target.id} delete button form clicked`)
-}
-
-const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
-  const target = e.target as HTMLElement
-  console.log(`${target.id} edit button form clicked`)
+  console.log(`${target.id} reset button form clicked`)
 }
 
 const handleAddOfEditableEntry = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -212,15 +207,12 @@ function App() {
           submitText={'Submit'}
           handleSubmit={handleSubmit}
           handleSubmitForm={handleSubmitForm}
+          hasReset
+          resetText={'Clear'}
+          handleReset={handleReset}
           hasCancel
           cancelText={'Back'}
           handleCancel={handleCancel}
-          hasDelete
-          deleteText={'Remove'}
-          handleDelete={handleDelete}
-          hasEdit
-          editText={'Edit'}
-          handleEdit={handleEdit}
         />
       </div>
     </div>
