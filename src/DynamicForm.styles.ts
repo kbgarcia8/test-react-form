@@ -5,7 +5,7 @@ export const StyledDynamicForm = styled(DynamicForm)`
     background-color: ${({theme})=> theme.colors.bg};
     color: ${({theme})=> theme.colors.text};
     &.with-fieldsets{
-        height: 50%;
+        height: 100%;
         padding: 0.75rem;
     }
     & .address-fieldset-wrapper{

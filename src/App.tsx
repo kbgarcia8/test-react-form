@@ -4,7 +4,7 @@ import './App.css'
 import EditIcon from './assets/EditIcon'
 import DeleteIcon from './assets/DeleteIcon'
 import { StyledDynamicForm } from './DynamicForm.styles'
-import type { FieldsetShape, inputEntryShape } from '@kbgarcia8/react-dynamic-form'
+import type { FieldsetShape, inputEntryShape, LabeledCheckboxOrRadio } from '@kbgarcia8/react-dynamic-form'
 import { useTheme } from '@kbgarcia8/react-dynamic-form'
 
 const addressInputsArray = [
@@ -16,6 +16,7 @@ const addressInputsArray = [
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
+      checked: false,
       //Start of Label Props
       textLabel: '', //=> obtained thru map
       additionalInfo: "Additional address information 1 of User",
@@ -24,7 +25,6 @@ const addressInputsArray = [
       //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      isEditable: true,
       //Additional in inputEntryShape
       editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
       deleteIcon: <DeleteIcon/>,
@@ -37,6 +37,7 @@ const addressInputsArray = [
           }
       ],
       //onClick functions obtained thru map
+      isEditable: true as const,
     },
     {
       //Input Props
@@ -46,7 +47,6 @@ const addressInputsArray = [
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
-      value: "",
       //Start of Label Props
       textLabel: '', //=> obtained thru map
       additionalInfo: "Additional address information 2 of User",
@@ -55,7 +55,6 @@ const addressInputsArray = [
       //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      isEditable: true,
       //Additional in inputEntryShape
       editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
       deleteIcon: <DeleteIcon/>,
@@ -68,6 +67,7 @@ const addressInputsArray = [
           }
       ],
       //onClick functions obtained thru map
+      isEditable: true as const,
     },
     {
       //Input Props
@@ -77,7 +77,6 @@ const addressInputsArray = [
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
-      value: "",
       //Start of Label Props
       textLabel: '', //=> obtained thru map
       additionalInfo: "Additional address information 3 of User",
@@ -86,7 +85,6 @@ const addressInputsArray = [
       //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      isEditable: true,
       //Additional in inputEntryShape
       editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
       deleteIcon: <DeleteIcon/>,
@@ -99,6 +97,7 @@ const addressInputsArray = [
           }
       ],
       //onClick functions obtained thru map
+      isEditable: true as const,
     }
 ];
 
@@ -106,22 +105,10 @@ const handleLegendInputsOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
   console.log(e.currentTarget.value)
 }
 
-const handleDeleteClick = (e:React.MouseEvent<HTMLButtonElement>) => {
-  const target = e.target as HTMLElement
-  const { index } = target.dataset as { index?: number}
-  console.log(`Delete ${index}`)
-}
-
 const handleSaveClick = (e:React.MouseEvent<HTMLButtonElement>) => {
   const target = e.target as HTMLElement
   const { index } = target.dataset as { index?: number}
   console.log(`Save ${index}`)
-}
-
-const handleCancelClick = (e:React.MouseEvent<HTMLButtonElement>) => {
-  const target = e.target as HTMLElement
-  const { index } = target.dataset as { index?: number}
-  console.log(`Cancel ${index}`)
 }
 
 const submitLogic = () => {
@@ -158,17 +145,40 @@ function App() {
   
   const handleEditClick = (e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
-    const { index } = target.dataset as { index?: number}
+    const index = Number(target.dataset.index)
     console.log(index)
     setFieldsetsValues((prevFieldset) =>
       prevFieldset.map((fieldset)=> ({
         ...fieldset,
         inputs: fieldset.inputs.map((input, idx) =>({
           ...input,
-          editing: idx == index ? true : false
+          isEditable: true as const,
+          editing: idx == index && input.editing === false ? true : false
         }))
       }))
     )
+  }
+
+  const handleCancelClick = handleEditClick
+
+  const handleDeleteClick = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget as HTMLElement
+    const index = Number(target.dataset.index)
+    console.log(target.dataset.index)
+    setFieldsetsValues((prevFieldsets) => (
+      prevFieldsets.map((fieldset) => ({
+        ...fieldset,
+        inputs: fieldset.inputs.filter((_, idx) => idx != index)
+        .map(input => ({
+          ...input,
+          isEditable: true as const   // <— preserve it again
+        }))
+      }))
+    ))
+  }
+
+  const handleChangeOfEditableInformation = (e:React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.currentTarget.value)
   }
 
   const fieldsets:FieldsetShape[] = [
@@ -179,6 +189,7 @@ function App() {
               id: `${address.id}-${index}`,
               textLabel: `${address.editableInformation[0].info}`,
               checked: false,
+              isEditable: true as const,
               onChange: handleLegendInputsOnChange,
               onClickEdit: handleEditClick,
               onClickDelete: handleDeleteClick,
@@ -187,18 +198,17 @@ function App() {
               dataAttributes: {
                   "data-index": index
               }
-          })),
-          height: "35%",
+          })) as inputEntryShape<true, LabeledCheckboxOrRadio>[],
           isExpandable: true
       },
 
   ];
 
-  const [fieldsetsValues, setFieldsetsValues] = useState(fieldsets)
+  const [fieldsetsValues, setFieldsetsValues] = useState<FieldsetShape[]>(fieldsets)
 
   const { currentTheme, toggleTheme } = useTheme();
 
-  console.log(fieldsetsValues[0].inputs[0])
+  console.log(fieldsetsValues)
 
   return (
     <div className='body-wrapper'>
@@ -216,6 +226,7 @@ function App() {
           inputClass={'address-field-input'}
           labelClass={'address-field-label'}
           labelAndInputContainerClass={'address-field-label-n-input-container'}
+          onChangeOfEditableOption={handleChangeOfEditableInformation}
           handleAddingInputEntry={handleAddOfEditableEntry}
           hasSubmit
           submitText={'Submit'}
