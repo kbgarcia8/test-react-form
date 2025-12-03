@@ -2,12 +2,13 @@ import { DynamicForm } from '@kbgarcia8/react-dynamic-form'
 import styled from 'styled-components'
 
 export const StyledDynamicForm = styled(DynamicForm)`
-    
+    background-color: ${({theme})=> theme.colors.bg};
+    color: ${({theme})=> theme.colors.text};
     &.with-fieldsets{
-        height: 100%;
+        height: 50%;
+        padding: 0.75rem;
     }
     & .address-fieldset-wrapper{
-        border: 2px solid red;
         display: flex;
         flex-direction: column;
     }
@@ -22,9 +23,18 @@ export const StyledDynamicForm = styled(DynamicForm)`
     & legend {
         font-weight: 700;
     }
-    & .address-field-lic {
-        border: 2px solid blue;
+    & .address-field-label-n-input-container {
         width: 75%;
         padding: 0.5rem;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    & .add-input-button-space{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    & .add-input-entry {
+        width: 12.5%;
     }
 `

@@ -1,27 +1,26 @@
 import { useState } from 'react'
 import './App.css'
-import AddressIcon from './assets/AddressIcon'
+//import AddressIcon from './assets/AddressIcon'
 import EditIcon from './assets/EditIcon'
 import DeleteIcon from './assets/DeleteIcon'
 import { StyledDynamicForm } from './DynamicForm.styles'
 import type { FieldsetShape, inputEntryShape } from '@kbgarcia8/react-dynamic-form'
+import { useTheme } from '@kbgarcia8/react-dynamic-form'
 
 const addressInputsArray = [
     {
       //Input Props
-      type: "text" as const,
+      type: "checkbox" as const,
       id: "address-info",
       isRequired: true,
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
-      value: "",
-      placeholderText: "",
       //Start of Label Props
-      textLabel: "Address Information",
-      additionalInfo: "Address Information 1 of User",
-      $labelFlexDirection: "column" as const,
-      svg: <AddressIcon/>,
+      textLabel: '', //=> obtained thru map
+      additionalInfo: "Additional address information 1 of User",
+      $labelFlexDirection: "row" as const,
+      //svg: <AddressIcon/>,
       //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
@@ -41,19 +40,18 @@ const addressInputsArray = [
     },
     {
       //Input Props
-      type: "text" as const,
+      type: "checkbox" as const,
       id: "address-info",
       isRequired: true,
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
       value: "",
-      placeholderText: "",
       //Start of Label Props
-      textLabel: "Address Information",
-      additionalInfo: "Address Information 2 of User",
-      $labelFlexDirection: "column" as const,
-      svg: <AddressIcon/>,
+      textLabel: '', //=> obtained thru map
+      additionalInfo: "Additional address information 2 of User",
+      $labelFlexDirection: "row" as const,
+      //svg: <AddressIcon/>,
       //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
@@ -73,19 +71,18 @@ const addressInputsArray = [
     },
     {
       //Input Props
-      type: "text" as const,
+      type: "checkbox" as const,
       id: "address-info",
       isRequired: true,
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
       value: "",
-      placeholderText: "",
       //Start of Label Props
-      textLabel: "Address Information",
-      additionalInfo: "Address Information 3 of User",
-      $labelFlexDirection: "column" as const,
-      svg: <AddressIcon/>,
+      textLabel: '', //=> obtained thru map
+      additionalInfo: "Additional address information 3 of User",
+      $labelFlexDirection: "row" as const,
+      //svg: <AddressIcon/>,
       //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
@@ -107,12 +104,6 @@ const addressInputsArray = [
 
 const handleLegendInputsOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
   console.log(e.currentTarget.value)
-}
-
-const handleEditClick = (e:React.MouseEvent<HTMLButtonElement>) => {
-  const target = e.target as HTMLElement
-  const { index } = target.dataset as { index?: number}
-  console.log(`Edit ${index}`)
 }
 
 const handleDeleteClick = (e:React.MouseEvent<HTMLButtonElement>) => {
@@ -163,45 +154,68 @@ const handleAddOfEditableEntry = (e: React.MouseEvent<HTMLButtonElement>) => {
   console.log(`${target.id} button for adding editable input clicked`)
 }
 
-const fieldsets:FieldsetShape[] = [
-	{
-        legend: "Address Informations",
-        inputs: addressInputsArray.map((address, index) => ({
-            ...address,
-            id: `${address.id}-${index}`,
-            onChange: handleLegendInputsOnChange,
-            onClickEdit: handleEditClick,
-            onClickDelete: handleDeleteClick,
-            onClickSave: handleSaveClick,
-            onClickCancel: handleCancelClick,
-            dataAttributes: {
-                "data-index": index
-            }
-        })),
-        height: "35%",
-        isExpandable: true
-    },
-
-];
-
 function App() {
-  const [addressFieldsetValues, setAddressFieldsetValues] = useState<inputEntryShape<boolean>[]|null>(fieldsets[0].inputs) 
+  
+  const handleEditClick = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget as HTMLElement
+    const { index } = target.dataset as { index?: number}
+    console.log(index)
+    setFieldsetsValues((prevFieldset) =>
+      prevFieldset.map((fieldset)=> ({
+        ...fieldset,
+        inputs: fieldset.inputs.map((input, idx) =>({
+          ...input,
+          editing: idx == index ? true : false
+        }))
+      }))
+    )
+  }
 
-  console.log(addressFieldsetValues)
+  const fieldsets:FieldsetShape[] = [
+    {
+          legend: "Address Informations",
+          inputs: addressInputsArray.map((address, index) => ({
+              ...address,
+              id: `${address.id}-${index}`,
+              textLabel: `${address.editableInformation[0].info}`,
+              checked: false,
+              onChange: handleLegendInputsOnChange,
+              onClickEdit: handleEditClick,
+              onClickDelete: handleDeleteClick,
+              onClickSave: handleSaveClick,
+              onClickCancel: handleCancelClick,
+              dataAttributes: {
+                  "data-index": index
+              }
+          })),
+          height: "35%",
+          isExpandable: true
+      },
+
+  ];
+
+  const [fieldsetsValues, setFieldsetsValues] = useState(fieldsets)
+
+  const { currentTheme, toggleTheme } = useTheme();
+
+  console.log(fieldsetsValues[0].inputs[0])
 
   return (
     <div className='body-wrapper'>
       <h1>react-dynamic-form Testing</h1>
       <h2>Case 1: With Fieldsets</h2>
+      <div className="toggle-theme-btn-container">
+        <button onClick={toggleTheme}>Toggle Theme</button>
+      </div>
       <div className="with-fieldsets-container">
         <StyledDynamicForm
           className={'with-fieldsets'}
-          fieldsets={fieldsets}
+          fieldsets={fieldsetsValues}
           id="address"
           isExpandable={true}
           inputClass={'address-field-input'}
           labelClass={'address-field-label'}
-          labelAndInputContainerClass={'address-field-lic'}
+          labelAndInputContainerClass={'address-field-label-n-input-container'}
           handleAddingInputEntry={handleAddOfEditableEntry}
           hasSubmit
           submitText={'Submit'}
