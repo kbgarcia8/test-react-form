@@ -7,7 +7,7 @@ import { StyledDynamicForm } from './DynamicForm.styles'
 import type { FieldsetShape, inputEntryShape, LabeledCheckboxOrRadio } from '@kbgarcia8/react-dynamic-form'
 import { useTheme } from '@kbgarcia8/react-dynamic-form'
 
-const addressInputsArray = [
+const addressInputsArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
     {
       //Input Props
       type: "checkbox" as const,
@@ -18,7 +18,6 @@ const addressInputsArray = [
       name: "address",
       checked: false,
       //Start of Label Props
-      textLabel: '', //=> obtained thru map
       additionalInfo: "Additional address information 1 of User",
       $labelFlexDirection: "row" as const,
       //svg: <AddressIcon/>,
@@ -26,6 +25,7 @@ const addressInputsArray = [
       labelClass: "editable-label",
       inputClass: "editable-input",
       //Additional in inputEntryShape
+      isEditable: true,
       editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
       deleteIcon: <DeleteIcon/>,
       editing: false,
@@ -37,7 +37,6 @@ const addressInputsArray = [
           }
       ],
       //onClick functions obtained thru map
-      isEditable: true as const,
     },
     {
       //Input Props
@@ -47,8 +46,8 @@ const addressInputsArray = [
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
+      checked: false,
       //Start of Label Props
-      textLabel: '', //=> obtained thru map
       additionalInfo: "Additional address information 2 of User",
       $labelFlexDirection: "row" as const,
       //svg: <AddressIcon/>,
@@ -56,6 +55,7 @@ const addressInputsArray = [
       labelClass: "editable-label",
       inputClass: "editable-input",
       //Additional in inputEntryShape
+      isEditable: true,
       editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
       deleteIcon: <DeleteIcon/>,
       editing: false,
@@ -67,7 +67,6 @@ const addressInputsArray = [
           }
       ],
       //onClick functions obtained thru map
-      isEditable: true as const,
     },
     {
       //Input Props
@@ -77,8 +76,8 @@ const addressInputsArray = [
       //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
+      checked: false,
       //Start of Label Props
-      textLabel: '', //=> obtained thru map
       additionalInfo: "Additional address information 3 of User",
       $labelFlexDirection: "row" as const,
       //svg: <AddressIcon/>,
@@ -86,6 +85,7 @@ const addressInputsArray = [
       labelClass: "editable-label",
       inputClass: "editable-input",
       //Additional in inputEntryShape
+      isEditable: true,
       editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
       deleteIcon: <DeleteIcon/>,
       editing: false,
@@ -97,13 +97,8 @@ const addressInputsArray = [
           }
       ],
       //onClick functions obtained thru map
-      isEditable: true as const,
     }
 ];
-
-const handleLegendInputsOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-  console.log(e.currentTarget.value)
-}
 
 const handleSaveClick = (e:React.MouseEvent<HTMLButtonElement>) => {
   const target = e.target as HTMLElement
@@ -153,9 +148,8 @@ function App() {
         ...fieldset,
         inputs: fieldset.inputs.map((input, idx) =>({
           ...input,
-          isEditable: true as const,
           editing: idx == index && input.editing === false ? true : false
-        }))
+        } as typeof input))
       }))
     )
   }
@@ -170,12 +164,22 @@ function App() {
       prevFieldsets.map((fieldset) => ({
         ...fieldset,
         inputs: fieldset.inputs.filter((_, idx) => idx != index)
-        .map(input => ({
-          ...input,
-          isEditable: true as const
-        }))
       }))
     ))
+  }
+
+  const handleLegendInputsOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget as HTMLElement
+    const index = Number(target.dataset.index)
+    setFieldsetsValues((prevFieldset) =>
+      prevFieldset.map((fieldset)=> ({
+        ...fieldset,
+        inputs: fieldset.inputs.map((input, idx) =>({
+          ...input,
+          checked: idx === index ? true : false
+        } as typeof input))
+      }))
+    )
   }
 
   const handleChangeOfEditableInformation = (e:React.ChangeEvent<HTMLInputElement>) => {
