@@ -128,7 +128,8 @@ const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 
 const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
   const target = e.target as HTMLElement
-  console.log(`${target.id} cancel button form clicked`)
+  console.log(target)
+  alert('Cancel/Back button form clicked going back to previous page')
 }
 
 const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -171,7 +172,7 @@ function App() {
         inputs: fieldset.inputs.filter((_, idx) => idx != index)
         .map(input => ({
           ...input,
-          isEditable: true as const   // <— preserve it again
+          isEditable: true as const
         }))
       }))
     ))
@@ -206,9 +207,7 @@ function App() {
 
   const [fieldsetsValues, setFieldsetsValues] = useState<FieldsetShape[]>(fieldsets)
 
-  const { currentTheme, toggleTheme } = useTheme();
-
-  console.log(fieldsetsValues)
+  const { toggleTheme } = useTheme()
 
   return (
     <div className='body-wrapper'>
