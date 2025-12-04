@@ -100,12 +100,6 @@ const addressInputsArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
     }
 ];
 
-const handleSaveClick = (e:React.MouseEvent<HTMLButtonElement>) => {
-  const target = e.target as HTMLElement
-  const { index } = target.dataset as { index?: number}
-  console.log(`Save ${index}`)
-}
-
 const submitLogic = () => {
   console.log('Test form submit clicked')
 }
@@ -142,8 +136,7 @@ function App() {
   const handleEditClick = (e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
-    console.log(index)
-    setFieldsetsValues((prevFieldset) =>
+    setDraftFieldSetValues((prevFieldset) =>
       prevFieldset.map((fieldset)=> ({
         ...fieldset,
         inputs: fieldset.inputs.map((input, idx) =>({
@@ -154,24 +147,27 @@ function App() {
     )
   }
 
-  const handleCancelClick = handleEditClick
+  const handleCancelClick = () => {
+    
+    setDraftFieldSetValues(fieldsetsValues)
+  }
 
   const handleDeleteClick = (e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
-    console.log(target.dataset.index)
-    setFieldsetsValues((prevFieldsets) => (
+    setDraftFieldSetValues((prevFieldsets) => (
       prevFieldsets.map((fieldset) => ({
         ...fieldset,
         inputs: fieldset.inputs.filter((_, idx) => idx != index)
       }))
     ))
+    setFieldsetsValues(draftFieldsetValues)
   }
 
   const handleLegendInputsOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
-    setFieldsetsValues((prevFieldset) =>
+    setDraftFieldSetValues((prevFieldset) =>
       prevFieldset.map((fieldset)=> ({
         ...fieldset,
         inputs: fieldset.inputs.map((input, idx) =>({
@@ -183,7 +179,37 @@ function App() {
   }
 
   const handleChangeOfEditableInformation = (e:React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value)
+    const target = e.currentTarget
+    const info = String(target.dataset.key)
+    const editableIndex = Number(target.dataset.index)
+    
+    setDraftFieldSetValues((prevDraftFieldset) =>
+      prevDraftFieldset.map((fieldset)=> ({
+        ...fieldset,
+        inputs: fieldset.inputs.map((input) =>({
+          ...input,
+          editableInformation: input.editableInformation
+          && input.editableInformation.map((information, idx) => (
+            info === information.info && editableIndex === idx
+            ? {...information, info: target.value}
+            : information
+          ))
+        } as typeof input))
+      }))
+    )
+  }
+
+  const handleSaveClick = () => {
+    setDraftFieldSetValues((prevFieldset) =>
+      prevFieldset.map((fieldset)=> ({
+        ...fieldset,
+        inputs: fieldset.inputs.map((input) =>({
+          ...input,
+          editing: false
+        } as typeof input))
+      }))
+    )
+    setFieldsetsValues(draftFieldsetValues)
   }
 
   const fieldsets:FieldsetShape[] = [
@@ -210,7 +236,12 @@ function App() {
   ];
 
   const [fieldsetsValues, setFieldsetsValues] = useState<FieldsetShape[]>(fieldsets)
-
+  const [draftFieldsetValues, setDraftFieldSetValues] = useState<FieldsetShape[]>(fieldsetsValues)
+  console.log('saved')
+  console.dir(fieldsetsValues, { depth: null, colors: true });
+  
+  console.log('draft')
+  console.dir(draftFieldsetValues, { depth: null, colors: true });
   const { toggleTheme } = useTheme()
 
   return (
@@ -223,7 +254,7 @@ function App() {
       <div className="with-fieldsets-container">
         <StyledDynamicForm
           className={'with-fieldsets'}
-          fieldsets={fieldsetsValues}
+          fieldsets={draftFieldsetValues}
           id="address"
           isExpandable={true}
           inputClass={'address-field-input'}
