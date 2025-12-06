@@ -15,8 +15,12 @@ body {
   text-align: center;
 }
 .body-wrapper {
-  height: 100vh;
+  min-height: 100vh;
   max-width: 100vw;
+}
+
+.toggle-theme-button-container{
+  height: 50%;
 }
 
 .with-fieldsets-container{

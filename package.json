@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@kbgarcia8/react-dynamic-form": "^1.1.26",
+    "@kbgarcia8/react-dynamic-form": "^1.1.38",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "styled-components": "^6.1.19"

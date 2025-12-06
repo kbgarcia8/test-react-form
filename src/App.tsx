@@ -100,6 +100,114 @@ const addressInputsArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
     }
 ];
 
+const paymentInputArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
+    {
+      //Input Props
+      type: "checkbox" as const,
+      id: "payment-option",
+      isRequired: true,
+      //dataAttributes is obtained thru map
+      disabled: false,
+      name: "payment",
+      checked: false,
+      //Start of Label Props
+      additionalInfo: "Payment Method 1",
+      $labelFlexDirection: "row" as const,
+      //svg: <AddressIcon/>,
+      //Start of EditableInputProps
+      labelClass: "editable-label",
+      inputClass: "editable-input",
+      //Additional in inputEntryShape
+      isEditable: true,
+      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      deleteIcon: <DeleteIcon/>,
+      editing: false,
+      editableInformation: [ //These are informations editable within radio input acting as selection
+          {
+              name: 'Payment Method 1',
+              info: 'GCash',
+              type: 'text' as const
+          },
+          {
+              name: 'Payment Method Information 1',
+              info: '09123456789',
+              type: 'text' as const
+          }
+      ],
+      //onClick functions obtained thru map
+    },
+    {
+      //Input Props
+      type: "checkbox" as const,
+      id: "payment-option",
+      isRequired: true,
+      //dataAttributes is obtained thru map
+      disabled: false,
+      name: "payment",
+      checked: false,
+      //Start of Label Props
+      additionalInfo: "Payment Method 2",
+      $labelFlexDirection: "row" as const,
+      //svg: <AddressIcon/>,
+      //Start of EditableInputProps
+      labelClass: "editable-label",
+      inputClass: "editable-input",
+      //Additional in inputEntryShape
+      isEditable: true,
+      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      deleteIcon: <DeleteIcon/>,
+      editing: false,
+      editableInformation: [ //These are informations editable within radio input acting as selection
+          {
+              name: 'Payment Method 2',
+              info: 'Debit Card',
+              type: 'text' as const
+          },
+          {
+              name: 'Payment Method Information 2',
+              info: '123456789',
+              type: 'text' as const
+          }
+      ],
+      //onClick functions obtained thru map
+    },
+    {
+      //Input Props
+      type: "checkbox" as const,
+      id: "payment-option",
+      isRequired: true,
+      //dataAttributes is obtained thru map
+      disabled: false,
+      name: "payment",
+      checked: false,
+      //Start of Label Props
+      additionalInfo: "Payment Method 3",
+      $labelFlexDirection: "row" as const,
+      //svg: <AddressIcon/>,
+      //Start of EditableInputProps
+      labelClass: "editable-label",
+      inputClass: "editable-input",
+      //Additional in inputEntryShape
+      isEditable: true,
+      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      deleteIcon: <DeleteIcon/>,
+      editing: false,
+      editableInformation: [ //These are informations editable within radio input acting as selection
+          {
+              name: 'Payment Method 3',
+              info: 'Credit Card',
+              type: 'text' as const
+          },
+          {
+              name: 'Payment Method Information 3',
+              info: '987654321',
+              type: 'text' as const
+          }
+      ],
+      //onClick functions obtained thru map
+    }
+];
+
 const submitLogic = () => {
   console.log('Test form submit clicked')
 }
@@ -135,12 +243,14 @@ function App() {
   const handleEditClick = React.useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
+    const fieldsetIndex = Number(target.dataset.fieldsetidx)
+
     setDraftFieldSetValues((prevDraftFieldset) => prevDraftFieldset &&
-      prevDraftFieldset.map((fieldset)=> ({
+      prevDraftFieldset.map((fieldset, fieldsetidx)=> ({
         ...fieldset,
         inputs: fieldset.inputs.map((input, idx) =>({
           ...input,
-          editing: idx == index && input.editing === false ? true : false
+          editing: (idx == index && fieldsetIndex === fieldsetidx) && input.editing === false ? true : false
         } as typeof input))
       }))
     )
@@ -154,12 +264,15 @@ function App() {
   const handleDeleteClick = React.useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
+    const fieldsetIndex = Number(target.dataset.fieldsetidx)
+    console.log(fieldsetIndex)
+
     setDraftFieldSetValues((prevDraftFieldset) => {
       if(!prevDraftFieldset) return prevDraftFieldset
-      const updated = prevDraftFieldset.map((fieldset) => ({
+      const updated = prevDraftFieldset.map((fieldset, fieldsetidx) => ({
         ...fieldset,
-        inputs: fieldset.inputs.filter((_, idx) => idx != index)
-      }))
+        inputs: fieldsetidx === fieldsetIndex ? fieldset.inputs.filter((_, idx) => idx != index) : fieldset.inputs
+      } as typeof fieldset))
       setFieldsetsValues(updated)
       return updated
     })
@@ -169,14 +282,18 @@ function App() {
   const handleLegendInputsOnChange = React.useCallback((e:React.ChangeEvent<HTMLInputElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
+    const fieldsetIndex = Number(target.dataset.fieldsetidx)
+
     setDraftFieldSetValues((prevDraftFieldset) => prevDraftFieldset &&
-      prevDraftFieldset.map((fieldset)=> ({ 
-        ...fieldset,
-        inputs: fieldset.inputs.map((input, idx) =>({
-          ...input,
-          checked: idx === index ? true : false
-        } as typeof input))
-      }))
+      prevDraftFieldset.map((fieldset,fieldsetidx)=> 
+        fieldsetidx === fieldsetIndex 
+        ? {...fieldset,
+            inputs: fieldset.inputs.map((input, idx) =>({
+              ...input,
+              checked: idx === index ? true : false
+            } as typeof input))
+          }
+        : fieldset)
     )
   }, [])
 
@@ -184,39 +301,51 @@ function App() {
     const target = e.currentTarget
     const info = String(target.dataset.key)
     const editableIndex = Number(target.dataset.index)
+    const fieldsetIndex = Number(target.dataset.fieldsetindex)
     
     setDraftFieldSetValues((prevDraftFieldset) => prevDraftFieldset &&
-      prevDraftFieldset.map((fieldset)=> ({
-        ...fieldset,
-        inputs: fieldset.inputs.map((input) =>({
-          ...input,
-          editableInformation: input.editableInformation
-          && input.editableInformation.map((information, idx) => (
-            info === information.info && editableIndex === idx
-            ? {...information, info: target.value}
-            : information
-          ))
-        } as typeof input))
-      }))
+      prevDraftFieldset.map((fieldset,fieldsetidx)=> 
+        fieldsetidx === fieldsetIndex
+        ? {
+            ...fieldset,
+            inputs: fieldset.inputs.map((input) =>({
+              ...input,
+              editableInformation: input.editableInformation
+              && input.editableInformation.map((information, idx) => (
+                info === information.info && editableIndex === idx
+                ? {...information, info: target.value}
+                : information
+              ))
+            } as typeof input))
+          }
+        : fieldset
+      )
     )
   }, [])
 
-  const handleSaveClick = React.useCallback( async() => {
+  const handleSaveClick = React.useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget
+    const fieldsetIndex = Number(target.dataset.fieldsetindex)
+
     setDraftFieldSetValues((prevDraftFieldset) => {
       if(!prevDraftFieldset) return prevDraftFieldset
-      const updated = prevDraftFieldset.map((fieldset)=> ({
-        ...fieldset,
-        inputs: fieldset.inputs.map((input, index) =>({
-          ...input,
-          editing: false,
-          id: `${input.id}-${index}`,
-          textLabel: `${input.editableInformation && input.editableInformation[0].info}`,
-          checked: false,
-          dataAttributes: {
-            "data-index": index,
-          },
-        } as typeof input))
-      }))
+      const updated = prevDraftFieldset.map((fieldset, fieldsetidx)=> 
+        fieldsetidx === fieldsetIndex
+        ? {
+            ...fieldset,
+            inputs: fieldset.inputs.map((input, index) =>({
+              ...input,
+              editing: false,
+              id: `${input.id}-${index}`,
+              textLabel: `${input.editableInformation && input.editableInformation[0].info}`,
+              checked: false,
+              dataAttributes: {
+                "data-index": index,
+                "data-fieldsetidx": fieldsetidx
+              },
+            } as typeof input))
+          }
+        : fieldset)
       setFieldsetsValues(updated)
       return updated
   })
@@ -278,7 +407,7 @@ function App() {
         }))
     )
   }
-  console.log('re-render')
+  
   //! Use for initialization only, not for remapping after save/delete
   const fieldsets = React.useMemo<FieldsetShape[]>(() => {
   return [
@@ -297,10 +426,31 @@ function App() {
           onClickCancel: handleCancelClick,
           dataAttributes: {
             "data-index": index,
+            "data-fieldsetidx": 0
           },
         })) as inputEntryShape<true, LabeledCheckboxOrRadio>[],
         isExpandable: true,
       },
+      {
+        legend: "Payment Options",
+        inputs: paymentInputArray.map((payment,index) => ({
+          ...payment,
+          id: `${payment.id}-${index}`,
+          textLabel: `${payment.editableInformation[0].info}`,
+          checked: false,
+          isEditable: true as const,
+          onChange: handleLegendInputsOnChange,
+          onClickEdit: handleEditClick,
+          onClickDelete: handleDeleteClick,
+          onClickSave: handleSaveClick,
+          onClickCancel: handleCancelClick,
+          dataAttributes: {
+            "data-index": index,
+            "data-fieldsetidx": 1
+          },
+        }))as inputEntryShape<true, LabeledCheckboxOrRadio>[],
+        isExpandable: true
+      }
     ];
   }, [
   handleLegendInputsOnChange,
@@ -316,7 +466,7 @@ function App() {
       initialized.current = true
     }
   },[fieldsets])
-
+  console.log(fieldsets)
   return (
     <div className='body-wrapper'>
       <h1>react-dynamic-form Testing</h1>
