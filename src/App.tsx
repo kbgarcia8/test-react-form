@@ -235,7 +235,6 @@ function App() {
 
   const { toggleTheme } = useTheme()
   const initialized = React.useRef(false)
-  
 
   const [fieldsetsValues, setFieldsetsValues] = React.useState<FieldsetShape[] | null>(null)
   const [draftFieldsetValues, setDraftFieldSetValues] = React.useState<FieldsetShape[] | null>(null)
@@ -363,49 +362,93 @@ function App() {
   }
 
   const handleAddOfEditableEntry = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const target = e.target as HTMLElement
+    const target = e.currentTarget as HTMLElement
+    const fieldsetIndex = Number(target.dataset.fieldsetindex)
+    
     console.log(`${target.id} button for adding editable input clicked`)
-    setDraftFieldSetValues((prevDraftFieldset) => prevDraftFieldset &&
-      prevDraftFieldset.map((fieldset)=> ({
-        ...fieldset,
-        inputs: [...fieldset.inputs,
-          {
-            //Input Props
-            type: "checkbox" as const,
-            id: "address-info",
-            isRequired: true,
-            //dataAttributes is obtained thru map
-            disabled: false,
-            name: "address",
-            checked: false,
-            //Start of Label Props
-            additionalInfo: `Additional address information ${fieldset.inputs.length + 1} of User`,
-            $labelFlexDirection: "row" as const,
-            //svg: <AddressIcon/>,
-            //Start of EditableInputProps
-            labelClass: "editable-label",
-            inputClass: "editable-input",
-            //Additional in inputEntryShape
-            isEditable: true as const,
-            editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
-            deleteIcon: <DeleteIcon/>,
-            editing: true,
-            editableInformation: [ //These are informations editable within radio input acting as selection
-                {
-                    name: `Address ${fieldset.inputs.length + 1}`,
-                    info: '',
-                    type: 'text' as const
-                }
-            ],
-            onChange: handleLegendInputsOnChange,
-            onClickEdit: handleEditClick,
-            onClickDelete: handleDeleteClick,
-            onClickSave: handleSaveClick,
-            onClickCancel: handleCancelClick,
+    setDraftFieldSetValues((prevDraftFieldset) => {
+      if (!prevDraftFieldset) {
+        return prevDraftFieldset
+      } else {
+        const updated = [...prevDraftFieldset]
+        if (fieldsetIndex === 0) {
+          updated[0] = {...prevDraftFieldset[0],
+            inputs: [
+              ...prevDraftFieldset[0].inputs,
+              {
+                type: "checkbox" as const,
+                id: "address-info",
+                isRequired: true,
+                disabled: false,
+                name: "address",
+                checked: false,
+                additionalInfo: `Additional address information ${prevDraftFieldset[0].inputs.length + 1} of User`,
+                $labelFlexDirection: "row" as const,
+                labelClass: "editable-label",
+                inputClass: "editable-input",
+                isEditable: true as const,
+                editIcon: <EditIcon/>, 
+                deleteIcon: <DeleteIcon/>,
+                editing: true,
+                editableInformation: [ 
+                    {
+                        name: `Address ${prevDraftFieldset[0].inputs.length + 1}`,
+                        info: '',
+                        type: 'text' as const
+                    }
+                ],
+                onChange: handleLegendInputsOnChange,
+                onClickEdit: handleEditClick,
+                onClickDelete: handleDeleteClick,
+                onClickSave: handleSaveClick,
+                onClickCancel: handleCancelClick,
+              }
+            ]
           }
-        ]
-        }))
-    )
+        } else if (fieldsetIndex === 1) {
+          updated[1] = {...prevDraftFieldset[1],
+            inputs: [
+              ...prevDraftFieldset[1].inputs,
+              {
+                type: "checkbox" as const,
+                id: "paymet-option",
+                isRequired: true,
+                disabled: false,
+                name: "payment",
+                checked: false,
+                //Start of Label Props
+                additionalInfo: `Payment Method ${prevDraftFieldset[1].inputs.length + 1}`,
+                $labelFlexDirection: "row" as const,
+                labelClass: "editable-label",
+                inputClass: "editable-input",
+                isEditable: true as const,
+                editIcon: <EditIcon/>,
+                deleteIcon: <DeleteIcon/>,
+                editing: true,
+                editableInformation: [ 
+                    {
+                      name: `Payment Method ${prevDraftFieldset[1].inputs.length + 1}`,
+                      info: '',
+                      type: 'text' as const
+                    },
+                    {
+                      name: `Payment Method Information ${prevDraftFieldset[1].inputs.length + 1}`,
+                      info: '',
+                      type: 'text' as const
+                    }
+                ],
+                onChange: handleLegendInputsOnChange,
+                onClickEdit: handleEditClick,
+                onClickDelete: handleDeleteClick,
+                onClickSave: handleSaveClick,
+                onClickCancel: handleCancelClick,
+              }
+            ]
+          }
+        }
+        return updated
+      }
+    })
   }
   
   //! Use for initialization only, not for remapping after save/delete
