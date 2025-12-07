@@ -4,7 +4,8 @@ import styled from 'styled-components'
 export const StyledDynamicForm = styled(DynamicForm)`
     background-color: ${({theme})=> theme.colors.bg};
     color: ${({theme})=> theme.colors.text};
-    &.with-fieldsets{
+    &.with-fieldsets,
+    &.without-fieldsets{
         height: auto;
         padding: 1.25rem;
     }
@@ -36,5 +37,11 @@ export const StyledDynamicForm = styled(DynamicForm)`
     }
     & .add-input-entry {
         width: 12.5%;
+    }
+    
+    & .education-form-label-n-input-container {
+        width: 75%;
+        padding: 0.5rem;
+        justify-content: space-between;
     }
 `

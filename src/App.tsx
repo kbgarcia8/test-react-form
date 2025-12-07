@@ -4,125 +4,101 @@ import './App.css'
 import EditIcon from './assets/EditIcon'
 import DeleteIcon from './assets/DeleteIcon'
 import { StyledDynamicForm } from './DynamicForm.styles'
-import type { FieldsetShape, inputEntryShape, LabeledCheckboxOrRadio } from '@kbgarcia8/react-dynamic-form'
+import type { FieldsetShape, inputEntryShape, LabeledCheckboxOrRadio, LabeledTextLike } from '@kbgarcia8/react-dynamic-form'
 import { useTheme } from '@kbgarcia8/react-dynamic-form'
 
 const addressInputsArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
     {
-      //Input Props
       type: "checkbox" as const,
       id: "address-info",
       isRequired: true,
-      //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
       checked: false,
-      //Start of Label Props
       additionalInfo: "Additional address information 1 of User",
       $labelFlexDirection: "row" as const,
-      //svg: <AddressIcon/>,
-      //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      //Additional in inputEntryShape
       isEditable: true,
-      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      editIcon: <EditIcon/>, 
       deleteIcon: <DeleteIcon/>,
       editing: false,
-      editableInformation: [ //These are informations editable within radio input acting as selection
+      editableInformation: [ 
           {
               name: 'Address 1',
               info: 'Abad Santos, Manila',
               type: 'text' as const
           }
       ],
-      //onClick functions obtained thru map
+      
     },
     {
-      //Input Props
       type: "checkbox" as const,
       id: "address-info",
       isRequired: true,
-      //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
       checked: false,
-      //Start of Label Props
       additionalInfo: "Additional address information 2 of User",
       $labelFlexDirection: "row" as const,
-      //svg: <AddressIcon/>,
-      //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      //Additional in inputEntryShape
       isEditable: true,
-      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      editIcon: <EditIcon/>, 
       deleteIcon: <DeleteIcon/>,
       editing: false,
-      editableInformation: [ //These are informations editable within radio input acting as selection
+      editableInformation: [ 
           {
               name: 'Address 2',
               info: 'Alabang, Metro Manila',
               type: 'text' as const
           }
       ],
-      //onClick functions obtained thru map
+      
     },
     {
-      //Input Props
       type: "checkbox" as const,
       id: "address-info",
       isRequired: true,
-      //dataAttributes is obtained thru map
       disabled: false,
       name: "address",
       checked: false,
-      //Start of Label Props
       additionalInfo: "Additional address information 3 of User",
       $labelFlexDirection: "row" as const,
-      //svg: <AddressIcon/>,
-      //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      //Additional in inputEntryShape
       isEditable: true,
-      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      editIcon: <EditIcon/>, 
       deleteIcon: <DeleteIcon/>,
       editing: false,
-      editableInformation: [ //These are informations editable within radio input acting as selection
+      editableInformation: [ 
           {
               name: 'Address 3',
               info: 'San Pablo, Laguna',
               type: 'text' as const
           }
       ],
-      //onClick functions obtained thru map
+      
     }
 ];
 
 const paymentInputArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
     {
-      //Input Props
       type: "checkbox" as const,
       id: "payment-option",
       isRequired: true,
-      //dataAttributes is obtained thru map
       disabled: false,
       name: "payment",
       checked: false,
-      //Start of Label Props
       additionalInfo: "Payment Method 1",
       $labelFlexDirection: "row" as const,
-      //svg: <AddressIcon/>,
-      //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      //Additional in inputEntryShape
       isEditable: true,
-      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      editIcon: <EditIcon/>, 
       deleteIcon: <DeleteIcon/>,
       editing: false,
-      editableInformation: [ //These are informations editable within radio input acting as selection
+      editableInformation: [ 
           {
               name: 'Payment Method 1',
               info: 'GCash',
@@ -134,30 +110,24 @@ const paymentInputArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
               type: 'text' as const
           }
       ],
-      //onClick functions obtained thru map
+      
     },
     {
-      //Input Props
       type: "checkbox" as const,
       id: "payment-option",
       isRequired: true,
-      //dataAttributes is obtained thru map
       disabled: false,
       name: "payment",
       checked: false,
-      //Start of Label Props
       additionalInfo: "Payment Method 2",
       $labelFlexDirection: "row" as const,
-      //svg: <AddressIcon/>,
-      //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      //Additional in inputEntryShape
       isEditable: true,
-      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      editIcon: <EditIcon/>, 
       deleteIcon: <DeleteIcon/>,
       editing: false,
-      editableInformation: [ //These are informations editable within radio input acting as selection
+      editableInformation: [ 
           {
               name: 'Payment Method 2',
               info: 'Debit Card',
@@ -169,30 +139,25 @@ const paymentInputArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
               type: 'text' as const
           }
       ],
-      //onClick functions obtained thru map
+      
     },
     {
-      //Input Props
+      
       type: "checkbox" as const,
       id: "payment-option",
       isRequired: true,
-      //dataAttributes is obtained thru map
       disabled: false,
       name: "payment",
       checked: false,
-      //Start of Label Props
       additionalInfo: "Payment Method 3",
       $labelFlexDirection: "row" as const,
-      //svg: <AddressIcon/>,
-      //Start of EditableInputProps
       labelClass: "editable-label",
       inputClass: "editable-input",
-      //Additional in inputEntryShape
       isEditable: true,
-      editIcon: <EditIcon/>, //=>editIcon in EditableInputProps
+      editIcon: <EditIcon/>, 
       deleteIcon: <DeleteIcon/>,
       editing: false,
-      editableInformation: [ //These are informations editable within radio input acting as selection
+      editableInformation: [ 
           {
               name: 'Payment Method 3',
               info: 'Credit Card',
@@ -204,9 +169,48 @@ const paymentInputArray:inputEntryShape<true,LabeledCheckboxOrRadio>[] = [
               type: 'text' as const
           }
       ],
-      //onClick functions obtained thru map
+      
     }
 ];
+
+const educationalInformationInputArray:inputEntryShape<false,LabeledTextLike>[] = [
+  {
+    type: "text" as const,
+    id: "educational-info",
+    isRequired: true,
+    disabled: false,
+    name: "education",
+    value: 'Technological Institute of the Philippines-Manila',
+    $labelFlexDirection: "column" as const,
+    labelClass: "editable-label",
+    inputClass: "editable-input",
+    isEditable: false,
+  },
+  {
+    type: "text" as const,
+    id: "educational-info",
+    isRequired: true,
+    disabled: false,
+    name: "education",
+    value: 'Pamantasan ng Lungsod ng Maynila',
+    $labelFlexDirection: "column" as const,
+    labelClass: "editable-label",
+    inputClass: "editable-input",
+    isEditable: false,
+  },
+  {
+    type: "text" as const,
+    id: "educational-info",
+    isRequired: true,
+    disabled: false,
+    name: "education",
+    value: 'National University',
+    $labelFlexDirection: "column" as const,
+    labelClass: "editable-label",
+    inputClass: "editable-input",
+    isEditable: false,
+  }
+]
 
 const submitLogic = () => {
   console.log('Test form submit clicked')
@@ -239,6 +243,9 @@ function App() {
   const [fieldsetsValues, setFieldsetsValues] = React.useState<FieldsetShape[] | null>(null)
   const [draftFieldsetValues, setDraftFieldSetValues] = React.useState<FieldsetShape[] | null>(null)
   
+  const [formInputsValues, setFormInputsValues] = React.useState<inputEntryShape<false,LabeledTextLike>[] | null>(null)
+  const [draftFormInputsValues, setDraftFormInputsValues] = React.useState<inputEntryShape<false,LabeledTextLike> | null>(null)
+
   const handleEditClick = React.useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
     const index = Number(target.dataset.index)
@@ -416,7 +423,7 @@ function App() {
                 disabled: false,
                 name: "payment",
                 checked: false,
-                //Start of Label Props
+                
                 additionalInfo: `Payment Method ${prevDraftFieldset[1].inputs.length + 1}`,
                 $labelFlexDirection: "row" as const,
                 labelClass: "editable-label",
@@ -502,6 +509,18 @@ function App() {
   handleCancelClick,
   handleSaveClick]);
 
+  const educationalInformationInputs = educationalInformationInputArray.map((educationalInput,index)=>(
+    {...educationalInput,
+      id: `${educationalInput.id}-${index}`,
+      textLabel: `Education Info ${index+1}`,
+      isEditable: false as const,
+      onChange: handleLegendInputsOnChange,
+      dataAttributes: {
+        "data-index": index,
+      },
+    }
+  ))
+
   React.useEffect(() =>{
     if(!initialized.current) {
       setFieldsetsValues(fieldsets)
@@ -509,7 +528,7 @@ function App() {
       initialized.current = true
     }
   },[fieldsets])
-  console.log(fieldsets)
+  
   return (
     <div className='body-wrapper'>
       <h1>react-dynamic-form Testing</h1>
@@ -528,6 +547,30 @@ function App() {
           labelAndInputContainerClass={'address-field-label-n-input-container'}
           onChangeOfEditableOption={handleChangeOfEditableInformation}
           handleAddingInputEntry={handleAddOfEditableEntry}
+          hasSubmit
+          submitText={'Submit'}
+          handleSubmit={handleSubmit}
+          handleSubmitForm={handleSubmitForm}
+          hasReset
+          resetText={'Clear'}
+          handleReset={handleReset}
+          hasCancel
+          cancelText={'Back'}
+          handleCancel={handleCancel}
+        />
+      </div>
+      <h2>Case 2: Without Fieldsets (non-expandable formInputs)</h2>
+      <div className="without-fieldsets-container">
+        <StyledDynamicForm
+          className={'without-fieldsets'}
+          fieldsets={null}
+          formInputs={educationalInformationInputs}
+          id="education"
+          isExpandable={false}
+          inputClass={'education-form-input'}
+          labelClass={'education-form-label'}
+          labelAndInputContainerClass={'education-form-label-n-input-container'}
+          onChangeOfEditableOption={handleChangeOfEditableInformation}
           hasSubmit
           submitText={'Submit'}
           handleSubmit={handleSubmit}

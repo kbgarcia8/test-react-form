@@ -23,7 +23,8 @@ body {
   height: 50%;
 }
 
-.with-fieldsets-container{
+.with-fieldsets-container,
+.without-fieldsets-container {
   height: 100%;
   display: flex;
 }
