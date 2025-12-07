@@ -244,7 +244,6 @@ function App() {
   const [draftFieldsetValues, setDraftFieldSetValues] = React.useState<FieldsetShape[] | null>(null)
   
   const [formInputsValues, setFormInputsValues] = React.useState<inputEntryShape<false,LabeledTextLike>[] | null>(null)
-  const [draftFormInputsValues, setDraftFormInputsValues] = React.useState<inputEntryShape<false,LabeledTextLike> | null>(null)
 
   const handleEditClick = React.useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget as HTMLElement
@@ -457,6 +456,26 @@ function App() {
       }
     })
   }
+
+  const handleChangeofEducationalInformations = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
+    const index = Number(target.dataset.index)
+    const value = target.value
+    console.log(index)
+    setFormInputsValues((prevFormInputsValues) => 
+      prevFormInputsValues
+      ? prevFormInputsValues.map((input,inputIndex) => 
+          inputIndex === index 
+          ? {...input,
+              value: value
+            }
+          : input
+        )
+      : prevFormInputsValues
+    )
+  }
+  console.log(formInputsValues)
+  console.log(fieldsetsValues)
   
   //! Use for initialization only, not for remapping after save/delete
   const fieldsets = React.useMemo<FieldsetShape[]>(() => {
@@ -514,7 +533,7 @@ function App() {
       id: `${educationalInput.id}-${index}`,
       textLabel: `Education Info ${index+1}`,
       isEditable: false as const,
-      onChange: handleLegendInputsOnChange,
+      onChange: handleChangeofEducationalInformations,
       dataAttributes: {
         "data-index": index,
       },
@@ -525,9 +544,10 @@ function App() {
     if(!initialized.current) {
       setFieldsetsValues(fieldsets)
       setDraftFieldSetValues(fieldsets)
+      setFormInputsValues(educationalInformationInputs)
       initialized.current = true
     }
-  },[fieldsets])
+  },[fieldsets,educationalInformationInputs])
   
   return (
     <div className='body-wrapper'>
@@ -564,13 +584,12 @@ function App() {
         <StyledDynamicForm
           className={'without-fieldsets'}
           fieldsets={null}
-          formInputs={educationalInformationInputs}
+          formInputs={formInputsValues || []}
           id="education"
           isExpandable={false}
           inputClass={'education-form-input'}
           labelClass={'education-form-label'}
           labelAndInputContainerClass={'education-form-label-n-input-container'}
-          onChangeOfEditableOption={handleChangeOfEditableInformation}
           hasSubmit
           submitText={'Submit'}
           handleSubmit={handleSubmit}
