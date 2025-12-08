@@ -263,7 +263,7 @@ function App() {
 
   const handleCancelClick = React.useCallback(() => {
     
-    setDraftFieldSetValues(prevDraftFieldsetValues => fieldsetsValues)
+    setDraftFieldSetValues(_prevDraftFieldsetValues => fieldsetsValues)
   }, [fieldsetsValues])
 
   const handleDeleteClick = React.useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
